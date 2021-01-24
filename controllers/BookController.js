@@ -37,8 +37,9 @@ function create(newBook) {
     })
 }
 
+
 module.exports = {
     findByName,
     findAll,
-    create
+    create,
 }

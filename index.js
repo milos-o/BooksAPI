@@ -42,4 +42,11 @@ const bookRoutes = require("./routes/books");
 app.use(userRoutes);
 app.use(bookRoutes);
 
-app.listen(PORT);
+//app.listen(PORT);
+//privremeno 
+const connect = () => {
+  return mongoose.connect("mongodb://localhost:27017/domaciTest");
+};
+connect().then(()=>{
+ app.listen(PORT,()=> console.log("Server started"));
+})

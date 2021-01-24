@@ -4,6 +4,7 @@ const Books = new mongoose.Schema({
   name: {
     type: String,
     required: true,
+    index:true,
     unique: true
   },
   description: {
@@ -22,10 +23,14 @@ const Books = new mongoose.Schema({
   },
   pages: {
       type: Number,
-      required: true
+      required: true,
+      min:10,
+      max:5000
   },
   user:{
-      
+    type:mongoose.Schema.Types.ObjectId,
+    required:true,
+    ref:"Users"
   }
 }, {timestamps: true})
 
