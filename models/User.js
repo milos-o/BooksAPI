@@ -18,9 +18,10 @@ const Users = new mongoose.Schema({
   },
   role: {
       type: Boolean,
-      required:true
+      required:true,
+      default:0
   },
-  books: [{
+  book: [{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Books"
   }]
