@@ -28,7 +28,7 @@ router.post("/book",async (req,res)=>{
             res.status(200).json(book);
             
         }else{
-            throw new Error("User doesnt exist");
+            res.status(400).send("Wrong user");
         }
     } catch (error) {
         res.status(400).send(error);
