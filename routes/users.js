@@ -4,6 +4,7 @@ const UserController = require('../controllers/UserController');
 
 const router = express.Router();
 
+
 router.get("/user/:username",async (req,res) => {
     let username = req.params.username;
     //console.log(username);
@@ -61,6 +62,9 @@ router.delete("/user/:username",async (req,res) => {
         res.status(400).send(error);
     }
 })
+router.get('/login', UserController.login);
+
+router.get('/admins', UserController.getAllAdmins);
 
 
 module.exports = router;

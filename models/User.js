@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const Users = new mongoose.Schema({
   username: {
@@ -21,11 +22,17 @@ const Users = new mongoose.Schema({
       required:true,
       default:0
   },
-  book: [{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"Books"
-  }]
+      type: Boolean
+  },
+  book: [
+    {
+      bookId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Book'
+      }
+    }
+  ]
 }, {timestamps: true})
 
 
-module.exports = mongoose.model('Users', Users)
+module.exports = mongoose.model('User', Users)

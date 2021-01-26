@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 const Books = new mongoose.Schema({
   name: {
@@ -27,12 +28,12 @@ const Books = new mongoose.Schema({
       min:10,
       max:5000
   },
-  user:{
-    type:mongoose.Schema.Types.ObjectId,
-    required:true,
-    ref:"Users"
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
   }
 }, {timestamps: true})
 
 
-module.exports = mongoose.model('Books', Books)
+module.exports = mongoose.model('Book', Books)
