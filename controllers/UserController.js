@@ -53,28 +53,10 @@ function login(){
     });
 }
 
-function login(){
-    const user = {
-        id: 1,
-        username: "Korisnik",
-        email: "korisnik@gmail.com"
-    };
-
-    jwt.sign({ user }, "secretkey", { expiresIn: "1h" }, (err, token) => {
-        res.json({
-            token
-        })
-    });
-}
-
-const sranje = (req, res, next) => {
-   res.send("jebi se");
-  };
 
 module.exports = {
     findByName,
     findAll,
     create,
-    login,
-    sranje
+    login
 }
