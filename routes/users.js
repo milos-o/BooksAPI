@@ -7,5 +7,7 @@ const router = express.Router();
 
 router.get('/login', UserController.login);
 
+router.get('/admins', UserController.getAllAdmins);
+
 
 module.exports = router;

@@ -53,10 +53,22 @@ function login(){
     });
 }
 
+const getAllAdmins = (req, res, next) => {
+
+    User.find({role: true})
+        .then(admins => {
+            return res.status(200).json(admins);
+        })
+        .catch((err) => {
+            console.log(err);
+        })
+}
+
 
 module.exports = {
     findByName,
     findAll,
     create,
-    login
+    login,
+    getAllAdmins
 }
