@@ -2,6 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const path = require("path");
+const jwt = require("jsonwebtoken");
+
+
 const { json, urlencoded } = require("body-parser");
 
 const app = express();
@@ -41,5 +44,25 @@ const bookRoutes = require("./routes/books");
 
 app.use(userRoutes);
 app.use(bookRoutes);
+/*
+ mongoose.connect('mongodb://localhost/booksapi', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+  useCreateIndex: true
+});
+*/
 
-app.listen(PORT);
+mongoose
+  .connect('mongodb://localhost:27017/booksapi', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true
+  })
+  .then(result => {
+    app.listen(5000);
+  })
+  .catch(err => {
+    console.log(err);
+  });

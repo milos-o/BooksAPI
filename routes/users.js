@@ -4,11 +4,10 @@ const UserController = require('../controllers/UserController');
 
 const router = express.Router();
 
-router.get('/', UserController.getIndex);
+router.get('/', UserController.sranje);
 
-router.get('/books', UserController.findAll);
 
-router.get('/books/:name', UserController.findByName);
+router.get('/login', UserController.login);
 
 
 module.exports = router;
