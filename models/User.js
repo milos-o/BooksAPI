@@ -22,14 +22,9 @@ const Users = new mongoose.Schema({
       required:true,
       default:0
   },
-      type: Boolean
-  },
   book: [
-    {
-      bookId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Book'
-      }
+    { type: Schema.Types.ObjectId,
+      ref: 'Book'
     }
   ]
 }, {timestamps: true})
