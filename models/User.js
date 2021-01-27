@@ -5,7 +5,8 @@ const Users = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    index:true
   },
   password: {
     type: String,
@@ -17,6 +18,10 @@ const Users = new mongoose.Schema({
     unique: true
   },
   role: {
+      type: Boolean,
+      required:true,
+      default:0
+  },
       type: Boolean
   },
   book: [

@@ -1,6 +1,7 @@
 const express = require('express');
 
 const BookController = require('../controllers/BookController');
+const User = require('../models/User');
 
 const router = express.Router();
 
@@ -8,6 +9,7 @@ const router = express.Router();
 router.get('/books', BookController.findAllBooks);
 
 router.get('/books/:id', BookController.findBookById);
+
 
 router.get('/book_num/:id', BookController.numberOfBooks);
 
