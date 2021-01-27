@@ -30,8 +30,15 @@ const addNew = (req, res, next) => {
   const description = req.body.description;
   const quantity = req.body.quantity;
   const pages = req.body.pages;
-
+  const userId = req.body.userId;
   //    const imageUrl = image.path;
+
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json(errors.array());
+  }
+
 
   const book = new Book({
     name: name,
@@ -39,11 +46,13 @@ const addNew = (req, res, next) => {
     description: description,
     quantity: quantity,
     pages: pages,
+    userId: userId
   });
   book
     .save()
     .then((result) => {
       console.log("Created Product");
+      return res.status(200);
     })
     .catch((err) => {
       const error = new Error(err);

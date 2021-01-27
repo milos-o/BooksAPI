@@ -44,14 +44,6 @@ const bookRoutes = require("./routes/books");
 
 app.use(userRoutes);
 app.use(bookRoutes);
-/*
- mongoose.connect('mongodb://localhost/booksapi', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-  useCreateIndex: true
-});
-*/
 
 mongoose
   .connect('mongodb://localhost:27017/booksapi', {

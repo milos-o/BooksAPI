@@ -1,5 +1,5 @@
 const express = require('express');
-
+const { body, validationResult } = require('express-validator');
 const UserController = require('../controllers/UserController');
 
 const router = express.Router();
@@ -31,8 +31,9 @@ router.get("/users", async (req,res) =>{
     }
 })
 
-router.post("/user/",async (req,res) => {
+router.post("/user/", async (req,res) => {
     //console.log(req.body.user);
+   
     let newUser = req.body.user;
     try {
         let user = await UserController.create(newUser);
