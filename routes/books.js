@@ -1,11 +1,11 @@
 const express = require('express');
-
+const { verifyToken } = require('../helpers');
 const BookController = require('../controllers/BookController');
 
 const router = express.Router();
 
 
-router.get('/books', BookController.findAllBooks);
+router.get('/books', verifyToken, BookController.findAllBooks);
 
 router.get('/books/:id', BookController.findBookById);
 
