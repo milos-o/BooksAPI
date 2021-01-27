@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const User = require('../models/User');
 const Book= require('../models/Book');
 
@@ -24,9 +26,20 @@ function findAll(req,res){
 }
 
 
-function create(req,res,next) {
+ function create(req,res,next) {
     if(req.query.username || req.query.id) next();
-    let newUser = req.body.user;
+    let username = req.body.username;
+    let password = bcrypt.hashSync(req.body.password,bcrypt.genSaltSync(10));
+    let role = req.body.role;
+    let email =req.body.email;
+    let book=req.body.book;
+    let newUser={
+        username,
+        password,
+        role,
+        email,
+        book
+    }
     User.create(newUser).then((user)=>{
         res.status(201).json(user);
     })
