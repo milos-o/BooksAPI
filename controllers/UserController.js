@@ -134,9 +134,9 @@ function updateBook(req,res){
 
 function login(){
     const user = {
-        id: 1,
-        username: "Korisnik",
-        email: "korisnik@gmail.com"
+        username: req.body.useranem,
+        password: req.body.password,
+        email: req.body.email
     };
 
     jwt.sign({ user }, "secretkey", { expiresIn: "1h" }, (err, token) => {
