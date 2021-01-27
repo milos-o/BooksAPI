@@ -23,11 +23,8 @@ const Users = new mongoose.Schema({
       default:0
   },
   book: [
-    {
-      bookId: {
-        type: Schema.Types.ObjectId,
-        ref: 'Book'
-      }
+    { type: Schema.Types.ObjectId,
+      ref: 'Book'
     }
   ]
 }, {timestamps: true})
