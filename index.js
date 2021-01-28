@@ -11,6 +11,9 @@ require('dotenv').config()
 const { json, urlencoded } = require("body-parser");
 require('./config/passport.js')(passport)
 const app = express();
+app.use("/csv",express.static(__dirname+"/csv"));
+
+
 app.use(urlencoded({ extended: true }));
 app.use(json());
 const PORT = process.env.PORT || 5000;

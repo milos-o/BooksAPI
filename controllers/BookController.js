@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const { validationResult } = require('express-validator/check');
 const Book = require("../models/Book");
 const User = require("../models/User");
+const Helper = require("../helpers");
 
 const findBookById =  (req, res, next) => {
   bookId = req.params.id;
@@ -83,7 +84,8 @@ const addNew = (req, res, next) => {
     .save()
     .then((result) => {
       console.log("Created Product");
-      return res.status(200);
+      Helper.sendMailToAdmin(result);
+      res.status(200).json(result);
     })
     .catch((err) => {
       const error = new Error(err);
