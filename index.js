@@ -2,11 +2,14 @@ const express = require("express");
 const mongoose = require("mongoose");
 const multer = require("multer");
 const path = require("path");
+const flash = require('connect-flash');
 const jwt = require("jsonwebtoken");
-
-
+const session = require("express-session");
+const passport = require("passport");
+const User = require("./models/User");
+require('dotenv').config()
 const { json, urlencoded } = require("body-parser");
-
+require('./config/passport.js')(passport)
 const app = express();
 app.use(urlencoded({ extended: true }));
 app.use(json());
@@ -39,6 +42,15 @@ app.use(
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
+
+app.use(session({
+  secret : 'secret',
+  resave : true,
+  saveUninitialized : true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
 const userRoutes = require("./routes/users");
 const bookRoutes = require("./routes/books");
 

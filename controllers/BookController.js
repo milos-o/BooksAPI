@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
-
+const { validationResult } = require('express-validator/check');
 const Book = require("../models/Book");
+const User = require("../models/User");
 
 const findBookById =  (req, res, next) => {
   bookId = req.params.id;
@@ -10,7 +11,8 @@ const findBookById =  (req, res, next) => {
 };
 
 const findAllBooks = (req, res, next) => {
-    
+    console.log("evo ga baja");
+    console.log(req.user);
     Book
       .find({})
       .then((results) => {
@@ -21,8 +23,30 @@ const findAllBooks = (req, res, next) => {
         console.log(err);
       });
   };
-  
+  /*
+  {
+    "name": "Lotr",
+    "description": "Hohohohoho",
+    "price": 15,
+    "quantity": 3,
+    "pages": 450
 
+    {
+     "name": "Game of thrones",
+     "description": "Hohohohohooooooooooooooo",
+     "price": 15,
+     "quantity": 3,
+     "pages": 4500
+       
+}
+      {
+     "email": "milos@badun.com",
+     "password": "12345"
+     
+       
+}
+}
+*/
 const addNew = (req, res, next) => {
   const name = req.body.name;
   //const image = req.file;
@@ -30,15 +54,17 @@ const addNew = (req, res, next) => {
   const description = req.body.description;
   const quantity = req.body.quantity;
   const pages = req.body.pages;
-  const userId = req.body.userId;
+  const userId = req.user._id;
   //    const imageUrl = image.path;
-
+//console.log(req.user);
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json(errors.array());
   }
 
+  
+ 
 
   const book = new Book({
     name: name,
@@ -48,6 +74,11 @@ const addNew = (req, res, next) => {
     pages: pages,
     userId: userId
   });
+
+  //req.user.book.push(mongoose.Types.ObjectId(book._id));
+  console.log(book._id);
+  User.findByIdAndUpdate(userId, { $push: { book: book._id } }).exec();
+
   book
     .save()
     .then((result) => {

@@ -67,7 +67,16 @@ const sendMailToAdmin = (book) => {
 
 };
 
+function checkAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next()
+  }
+
+  res.send("You are not logged in!");
+}
+
 module.exports = {
   verifyToken,
   sendMailToAdmin,
+  checkAuthenticated
 };

@@ -1,14 +1,14 @@
 const express = require('express');
 const { verifyToken } = require('../helpers');
 const { body, validationResult } = require('express-validator');
-
+const Auth = require("../config/auth");
 const BookController = require('../controllers/BookController');
 const User = require('../models/User');
 
 const router = express.Router();
 
 
-router.get('/books', verifyToken, BookController.findAllBooks);
+router.get('/books', Auth.ensureAuthenticated, BookController.findAllBooks);
 
 router.get('/books/:id', BookController.findBookById);
 

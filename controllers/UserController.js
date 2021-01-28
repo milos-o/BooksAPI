@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+
 const User = require('../models/User');
 const Book= require('../models/Book');
 
@@ -118,7 +120,7 @@ function updateBook(req,res){
         res.status(400).json(e);
     })
 }
-
+/*
 function login(){
     const user = {
         username: req.body.useranem,
@@ -132,7 +134,7 @@ function login(){
         })
     });
 }
-
+*/
 const getAllAdmins = (req, res, next) => {
 
     User.find({role: true})
@@ -144,6 +146,21 @@ const getAllAdmins = (req, res, next) => {
         })
 }
 
+const registerUser = async (req, res, next) => {
+    try {
+        const hashedPassword = await bcrypt.hash(req.body.password, 10)
+        const user = new User({
+          username: req.body.username,
+          email: req.body.email,
+          password: hashedPassword,
+          role: req.body.role
+        })
+        user.save();
+      } catch (e){
+        console.log(e);
+      }
+ }
+
 
 
 module.exports = {
@@ -152,12 +169,11 @@ module.exports = {
     create,
     update,
     deleteUser,
-    login,
     getAllAdmins,
     getBook,
     addBook,
     removeBook,
-    updateBook
-
+    updateBook,
+    registerUser
 
 }
