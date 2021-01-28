@@ -131,6 +131,16 @@ function updateBook(req,res){
         res.status(400).json(e);
     })
 }
+function comparePassword(username,plainPwd){
+    User.findOne({"username":username}).then((user)=>{
+        let password = user.password;
+        let match = bcrypt.compareSync(plainPwd,password);
+        
+        return match;
+    }).catch((e)=>{
+        return e;
+    })
+}
 
 function login(){
     const user = {
@@ -170,7 +180,8 @@ module.exports = {
     getBook,
     addBook,
     removeBook,
-    updateBook
+    updateBook,
+    comparePassword,
 
 
 }
