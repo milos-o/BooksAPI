@@ -186,27 +186,17 @@ const RemoveOneBook = (req, res, next) => {
     });
 };
 
-const getMoney = (req, res, next) => {
+const getMoney = async (req, res, next) => {
   let totalPrice = 0;
+  let number = 0;
+  records = await Book.find().where("_id").in(req.user.book).exec();
 
-  req.user.book.forEach((book) => {
-    Book.find(
-      {
-        _id: { $in: [book._id] },
-      },
-      function (err, docs) {
-        docs.forEach((document) => {
-          const broj = document.price * document.quantity;
-         totalPrice += broj;
-        });
-       
-      }
-    );
+  records.forEach((element) => {
+    number = element.quantity * element.price;
+    totalPrice += number;
   });
- 
-  setTimeout(()=>{
-    return res.status(200).json(totalPrice);
-  }, 5000);
+
+  return res.status(200).json(totalPrice);
 };
 
 module.exports = {
@@ -220,6 +210,3 @@ module.exports = {
   numberOfBooks,
   getMoney,
 };
-
-/*
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InBhc3N3b3JkIjoia2trMTIzIiwiZW1haWwiOiJtaWxvc0B0ZXN0LmNvbSJ9LCJpYXQiOjE2MTE2ODYyNzIsImV4cCI6MTYxMTY4OTg3Mn0.YAl4KtDDnEL_XrgKsXwn_WM3kgNi5ySdgKJpy5eJaYM*/
