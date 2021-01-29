@@ -24,9 +24,7 @@ router.post('/add-new', [
       .isLength({ min: 3, max: 15 })
       .isAlphanumeric()
       .trim(),
-    body('description')
-    .isLength({ min: 10, max: 150 })
-      .trim(),
+    body('description'),
     body('price')
       .isNumeric({ min: 1, max: 10000 }),
     body('quantity')

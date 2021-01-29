@@ -1,6 +1,6 @@
 const fs = require("fs");
 const nodemailer = require("nodemailer");
-const { getAllAdmins } = require('./controllers/UserController');
+const { getAdmins } = require('./controllers/UserController');
 
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -14,8 +14,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const writeStream = fs.createWriteStream("NovaKnjiga.csv");
-writeStream.write(`Naslov,  Opis,   Cijena,  Kolicina,   BrojStrana,  Slika\n`);
 
 const verifyToken = (req, res, next) => {
   // Get auth header value- zato sto se kroz Header salje token
@@ -37,12 +35,16 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-const sendMailToAdmin = (book) => {
-  writeStream.write(
-    `${book.name}, ${book.description}, ${book.price}, ${book.quantity}, ${book.pages}, ${book.image}\n`
-  );
+const sendMailToAdmin = async (book) => {
+  let uploadPath="./csv/NovaKnjiga.csv"
+  const writeStream = fs.createWriteStream(uploadPath);
+  writeStream.write(`Naslov,  Opis,   Cijena,  Kolicina,   BrojStrana,  Slika\n${book.name}, ${book.description}, ${book.price}, ${book.quantity}, ${book.pages}, ${book.image}\n`);
 
-  const admins = getAllAdmins();
+
+  let admins = await getAdmins();
+  console.log("test")
+  console.log(admins);
+  
   admins.forEach(admin => {
     var mailOptions = {
         from: 'milos.osto11@gmail.com',
@@ -50,6 +52,7 @@ const sendMailToAdmin = (book) => {
       subject: 'Information about New Book.',
        attachments: [
             {
+              filename:"NewBook.csv",
               path: uploadPath
            }
         ]

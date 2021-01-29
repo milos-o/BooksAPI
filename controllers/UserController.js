@@ -30,7 +30,7 @@ function findAll(req,res){
  function create(req,res,next) {
     if(req.query.username || req.query.id) next();
     let username = req.body.username;
-    let password = bcrypt.hashSync(req.body.password,bcrypt.genSaltSync(10));
+    let password = bcrypt.hashSync(req.body.password,10);
     let role = req.body.role;
     let email =req.body.email;
     let book=req.body.book;
@@ -173,6 +173,11 @@ const registerUser = async (req, res, next) => {
       }
  }
 
+ async function getAdmins(){
+    let admins = await User.find({role: true}).exec();
+    return admins;
+ 
+}
 
 
 module.exports = {
@@ -182,6 +187,7 @@ module.exports = {
     update,
     deleteUser,
     getAllAdmins,
+    getAdmins,
     getBook,
     addBook,
     removeBook,
