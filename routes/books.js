@@ -1,5 +1,4 @@
 const express = require('express');
-const { verifyToken } = require('../helpers');
 const { body, validationResult } = require('express-validator');
 const { isAuth, isAdmin } = require("../config/auth");
 const BookController = require('../controllers/BookController');
@@ -10,10 +9,10 @@ const router = express.Router();
 
 router.get('/books', isAuth,  BookController.findAllBooks);
 
-router.get('/books/:id', BookController.findBookById);
+router.get('/books/:id',  isAuth,  BookController.findBookById);
 
 
-router.get('/book_num/:id', BookController.numberOfBooks);
+router.get('/book_num/:id',  isAuth,  BookController.numberOfBooks);
 
 router.post('/add-new', [
     body('price')
@@ -32,16 +31,16 @@ router.post('/add-new', [
       body('pages')
       .isNumeric({ min: 10, max: 50000 })
       
-  ], BookController.addNew);
+  ],  isAuth, BookController.addNew);
 
-router.post('/edit-book', BookController.postEditProduct);
+router.post('/edit-book',  isAuth,  BookController.postEditProduct);
 
-router.post('/book_inc/:id', BookController.AddOneBook);
+router.post('/book_inc/:id', isAuth,  BookController.AddOneBook);
 
-router.post('/book_dec/:id', BookController.RemoveOneBook);
+router.post('/book_dec/:id', isAuth,  BookController.RemoveOneBook);
 
-router.delete('/delete-book', BookController.postDeleteProduct);
+router.delete('/delete-book', isAuth,  BookController.postDeleteProduct);
 
-router.get('/values', BookController.getMoney);
+router.get('/values',  isAuth, BookController.getMoney);
 
 module.exports = router;
