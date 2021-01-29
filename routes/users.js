@@ -9,9 +9,9 @@ const router = express.Router();
 
 router.get("/user/:username",isAuth, UserController.findByUsername);
 
-router.get("/users", isAuth, isAdmin, UserController.findAll);
+router.get("/users", isAuth,  UserController.findAll);
 
-router.post("/user/", isAuth, UserController.create);
+router.post("/user/",  UserController.create);
 
 router.put("/user/:username",isAuth, UserController.update);
 
@@ -25,10 +25,12 @@ router.delete("/user", isAuth, UserController.removeBook);
 
 router.post("/user", isAuth, UserController.addBook);
 
-
+router.get("/logSucces",(req,res)=>{
+  res.status(200).send("Loged in succesfully!!");
+})
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", {
-    successRedirect: "/books",
+    successRedirect: "/logSucces",
     failureRedirect: "/login",
     failureFlash: true,
   })(req, res, next);

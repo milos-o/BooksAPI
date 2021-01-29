@@ -1,6 +1,8 @@
 const jwt = require("jsonwebtoken");
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const passwordValidator = require("password-validator");
+const emailValidator = require("email-validator");
 
 const User = require('../models/User');
 const Book= require('../models/Book');
@@ -17,7 +19,7 @@ function findByUsername (req,res){
     })
 }
 function findAll(req,res){
-    console.log("hey");
+    //console.log("hey");
     User.find({}).then((users)=>{
         res.status(200).json(users);
     })
@@ -25,13 +27,35 @@ function findAll(req,res){
         res.status(400).json(error);
     })
 }
-
+function validatePassword(password){
+    let schema = new passwordValidator();
+    schema
+    .is().min(5)
+    .is().max(25)
+    .has().uppercase()
+    .has().lowercase()
+    .has().digits(1);
+    return schema.validate(password);
+}
 
  function create(req,res,next) {
     if(req.query.username || req.query.id) next();
+
     let username = req.body.username;
+    if(username.length<3 || username.length>20 ){
+        return res.status(400).send("bad username");
+        
+    }
+    if(req.body.password){
+        if(!validatePassword(req.body.password)){
+            return res.status(400).send("invalid password");
+        }
+    }
     let password = bcrypt.hashSync(req.body.password,10);
     let role = req.body.role;
+    if(!emailValidator.validate(req.body.email)){
+        return res.status(400).send("Bad email");
+    }
     let email =req.body.email;
     let book=req.body.book;
     let newUser={
@@ -53,10 +77,33 @@ function findAll(req,res){
 function update(req,res,next){
     
     if(req.query.username || req.query.id) next();
-
+    
     let username = req.params.username;
-    let update = req.body.update;
-
+    let update = req.body;
+    
+    if(!(req.user.username===username) && !(req.user.role)){
+        return res.status(403).send("You don't have permissions.")
+    }
+    if(update["username"]){
+        if(update["username"].length<3 || update["username"].length>20 ){
+            return res.status(400).send("bad username");
+            
+        }
+    }
+    if(update["password"]){
+        console.log("mjenja pwd");
+        if(!validatePassword(update["password"])){
+            return res.status(400).send("cant update,invalid password")
+        }
+        update["password"]= bcrypt.hashSync(update["password"],10);
+    }
+    if(update["email"]){
+        if(!emailValidator.validate(update["email"])){
+            return res.status(400).send("Bad email");
+        }
+    }
+    console.log("pass: ",update["password"]);
+    //if(username!=req.is)
     User.findOneAndUpdate({"username":username},update,{new:true})
     .then((user)=>{
         res.status(201).json(user);
@@ -69,8 +116,14 @@ function update(req,res,next){
 function deleteUser(req,res,next){
 
     if(req.query.username || req.query.id) next();
-
+   
     let username=req.params.username;
+
+    //console.log(req.user);
+    if(!(req.user.username===username) && !(req.user.role)){
+        return res.status(403).send("You don't have permissions.")
+    }
+
 
     User.findOneAndDelete({"username":username})
     .then((user)=>{
@@ -91,8 +144,11 @@ function getBook(req,res){
 function addBook(req,res){
     let user = req.query.username;
     let book = req.query.id;
-    console.log(user);
-    console.log(book);
+    if(!(req.user.username===user) && !(req.user.role)){
+        return res.status(403).send("You don't have permissions.")
+    }
+    //console.log(user);
+    //console.log(book);
     User.findOneAndUpdate({"username":user},{$push: {"book": mongoose.Types.ObjectId(book)}},{
         new:true,
         upsert:true
@@ -109,6 +165,9 @@ function addBook(req,res){
 function removeBook(req,res){
     let user=req.query.username;
     let bookId =req.query.id;
+    if(!(req.user.username===user) && !(req.user.role)){
+        return res.status(403).send("You don't have permissions.")
+    }
     User.findOneAndUpdate({"username":user},{$pull:{"book":mongoose.Types.ObjectId(bookId)}},{
         new:true
     })
@@ -123,6 +182,11 @@ function removeBook(req,res){
 }
 function updateBook(req,res){
     let user=req.query.username;
+
+    if(!(req.user.username===user) && !(req.user.role)){
+        return res.status(403).send("You don't have permissions.")
+    }
+
     let bookId =req.query.id;
     let update = req.body;
     Book.findByIdAndUpdate(bookId,update,{new:true})

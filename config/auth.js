@@ -10,9 +10,12 @@ const deleteFile = (filePath) => {
 
 const isAuth = (req,res,next) => {
         if(req.isAuthenticated()) {
+            //console.log("AUt:");
+           // console.log(req.params);
+            
             return next();
         }
-        return res.status(401).send("Please log in first.");
+        res.status(401).send("Please log in first.");
         
  }
 
