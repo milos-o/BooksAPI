@@ -1,14 +1,14 @@
 const express = require('express');
 const { verifyToken } = require('../helpers');
 const { body, validationResult } = require('express-validator');
-const Auth = require("../config/auth");
+const { isAuth, isAdmin } = require("../config/auth");
 const BookController = require('../controllers/BookController');
 const User = require('../models/User');
 
 const router = express.Router();
 
 
-router.get('/books', Auth.ensureAuthenticated, BookController.findAllBooks);
+router.get('/books', isAuth,  BookController.findAllBooks);
 
 router.get('/books/:id', BookController.findBookById);
 
@@ -26,7 +26,6 @@ router.post('/add-new', [
       .trim(),
     body('description')
     .isLength({ min: 10, max: 150 })
-      .isAlphanumeric()
       .trim(),
     body('price')
       .isNumeric({ min: 1, max: 10000 }),
@@ -44,5 +43,7 @@ router.post('/book_inc/:id', BookController.AddOneBook);
 router.post('/book_dec/:id', BookController.RemoveOneBook);
 
 router.delete('/delete-book', BookController.postDeleteProduct);
+
+router.get('/values', BookController.getMoney);
 
 module.exports = router;

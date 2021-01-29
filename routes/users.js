@@ -4,11 +4,12 @@ const UserController = require("../controllers/UserController");
 const passport = require("passport");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
+const { isAdmin, isAuth } = require("../config/auth");
 const router = express.Router();
 
 router.get("/user/:username", UserController.findByUsername);
 
-router.get("/users", UserController.findAll);
+router.get("/users", isAuth, isAdmin, UserController.findAll);
 
 router.post("/user/", UserController.create);
 
@@ -18,7 +19,7 @@ router.delete("/user/:username", UserController.deleteUser);
 
 //router.get("/login", UserController.login);
 
-router.get("/admins", UserController.getAllAdmins);
+router.get("/admins", isAuth, isAdmin,  UserController.getAllAdmins);
 
 router.get("/user", UserController.getBook);
 

@@ -1,29 +1,28 @@
 const mongoose = require("mongoose");
-const { validationResult } = require('express-validator/check');
+const { validationResult } = require("express-validator/check");
 const Book = require("../models/Book");
 const User = require("../models/User");
 
-const findBookById =  (req, res, next) => {
+const findBookById = (req, res, next) => {
   bookId = req.params.id;
-  Book.findById(bookId).then(results =>{
-      return res.send(results);
+  Book.findById(bookId).then((results) => {
+    return res.send(results);
   });
 };
 
 const findAllBooks = (req, res, next) => {
-    console.log("evo ga baja");
-    console.log(req.user);
-    Book
-      .find({})
-      .then((results) => {
-          console.log(results)
-        return res.send(results);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-  /*
+  console.log("evo ga baja");
+  console.log(req.user);
+  Book.find({})
+    .then((results) => {
+      console.log(results);
+      return res.send(results);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+/*
   {
     "name": "Lotr",
     "description": "Hohohohoho",
@@ -56,15 +55,12 @@ const addNew = (req, res, next) => {
   const pages = req.body.pages;
   const userId = req.user._id;
   //    const imageUrl = image.path;
-//console.log(req.user);
+  //console.log(req.user);
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json(errors.array());
   }
-
-  
- 
 
   const book = new Book({
     name: name,
@@ -72,7 +68,7 @@ const addNew = (req, res, next) => {
     description: description,
     quantity: quantity,
     pages: pages,
-    userId: userId
+    userId: userId,
   });
 
   //req.user.book.push(mongoose.Types.ObjectId(book._id));
@@ -146,47 +142,70 @@ const postDeleteProduct = (req, res, next) => {
 };
 
 const numberOfBooks = (req, res, next) => {
-    bookId = req.params.id;
-    Book.findById(bookId)
-        .then(book => {
-            return res.status(200).json(book.quantity);
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-}
+  bookId = req.params.id;
+  Book.findById(bookId)
+    .then((book) => {
+      return res.status(200).json(book.quantity);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 const AddOneBook = (req, res, next) => {
-    bookId = req.params.id;
-    
-    Book.findById(bookId)
-        .then(book => {
-            book.quantity += 1;
-            return book.save().then((result) =>{
-                console.log("Book quantity updated!");
-                return res.status(200);
-            })
-        }).catch((err) => {
-            console.log(err);
-        });
+  bookId = req.params.id;
 
-}
+  Book.findById(bookId)
+    .then((book) => {
+      book.quantity += 1;
+      return book.save().then((result) => {
+        console.log("Book quantity updated!");
+        return res.status(200);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
 
 const RemoveOneBook = (req, res, next) => {
-    bookId = req.params.id;
-    
-    Book.findById(bookId)
-        .then(book => {
-            book.quantity -= 1;
-            return book.save().then((result) =>{
-                console.log("Book quantity updated!");
-                return res.status(200);
-            })
-        }).catch((err) => {
-            console.log(err);
-        });
-}
+  bookId = req.params.id;
 
+  Book.findById(bookId)
+    .then((book) => {
+      book.quantity -= 1;
+      return book.save().then((result) => {
+        console.log("Book quantity updated!");
+        return res.status(200);
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+const getMoney = (req, res, next) => {
+  let totalPrice = 0;
+
+  req.user.book.forEach((book) => {
+    Book.find(
+      {
+        _id: { $in: [book._id] },
+      },
+      function (err, docs) {
+        docs.forEach((document) => {
+          const broj = document.price * document.quantity;
+         totalPrice += broj;
+        });
+       
+      }
+    );
+  });
+ 
+  setTimeout(()=>{
+    return res.status(200).json(totalPrice);
+  }, 5000);
+};
 
 module.exports = {
   findAllBooks,
@@ -197,6 +216,7 @@ module.exports = {
   AddOneBook,
   RemoveOneBook,
   numberOfBooks,
+  getMoney,
 };
 
 /*

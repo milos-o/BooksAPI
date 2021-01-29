@@ -17,6 +17,7 @@ function findByUsername (req,res){
     })
 }
 function findAll(req,res){
+    console.log("hey");
     User.find({}).then((users)=>{
         res.status(200).json(users);
     })
