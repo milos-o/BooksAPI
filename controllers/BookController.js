@@ -3,6 +3,7 @@ const { validationResult } = require("express-validator/check");
 const Book = require("../models/Book");
 const User = require("../models/User");
 const Helper = require("../helpers");
+const { deleteFile } = require("../config/auth");
 
 const findBookById = (req, res, next) => {
   bookId = req.params.id;
@@ -38,13 +39,12 @@ const findAllBooks = (req, res, next) => {
 
 const addNew = (req, res, next) => {
   const name = req.body.name;
-  //const image = req.file;
   const price = req.body.price;
   const description = req.body.description;
   const quantity = req.body.quantity;
   const pages = req.body.pages;
   const userId = req.user._id;
-  //    const imageUrl = image.path;
+  const imageUrl = req.file.path;
   
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -58,6 +58,7 @@ const addNew = (req, res, next) => {
     quantity: quantity,
     pages: pages,
     userId: userId,
+    image: imageUrl
   });
 
  
@@ -94,8 +95,8 @@ const postEditProduct = (req, res, next) => {
       book.description = updatedDesc;
       book.pages = updatedPages;
       if (image) {
-        fileHelper.deleteFile(book.imageUrl);
-        book.imageUrl = image.path;
+        deleteFile(book.image);
+        book.image = image.path;
       }
       return book.save().then((result) => {
         res.status(200).json(result);
@@ -109,12 +110,14 @@ const postEditProduct = (req, res, next) => {
 
 const postDeleteProduct = (req, res, next) => {
   const bookId = req.body.bookId;
+
   Book.findById(bookId)
     .then((book) => {
       if (!book) {
-        return next(new Error("Product not found."));
+        return next(new Error("Book not found."));
       }
-      //fileHelper.deleteFile(product.imageUrl);
+      
+      deleteFile(book.image);
       return Book.deleteOne({ _id: bookId });
     })
     .then(() => {

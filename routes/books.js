@@ -39,7 +39,7 @@ router.post('/book_inc/:id', isAuth,  BookController.AddOneBook);
 
 router.post('/book_dec/:id', isAuth,  BookController.RemoveOneBook);
 
-router.delete('/delete-book', isAuth,  BookController.postDeleteProduct);
+router.delete('/delete-book', isAuth, BookController.postDeleteProduct);
 
 router.get('/values',  isAuth, BookController.getMoney);
 
