@@ -15,26 +15,6 @@ const transporter = nodemailer.createTransport({
 });
 
 
-const verifyToken = (req, res, next) => {
-  // Get auth header value- zato sto se kroz Header salje token
-  const bearerHeader = req.headers["authorization"];
-  console.log(typeof bearerHeader);
-  // check if bearer is undefined
-  if (typeof bearerHeader !== "undefined") {
-    // Split at space
-    const bearer = bearerHeader.split(" ");
-    // get token
-    const bearerToken = bearer[1];
-    // set token
-    req.token = bearerToken;
-    next();
-  } else {
-    // Forbidden
-    console.log("error");
-    res.sendStatus(403);
-  }
-};
-
 const sendMailToAdmin = async (book) => {
   let uploadPath="./csv/NovaKnjiga.csv"
   const writeStream = fs.createWriteStream(uploadPath);
@@ -70,16 +50,7 @@ const sendMailToAdmin = async (book) => {
 
 };
 
-function checkAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next()
-  }
-
-  res.send("You are not logged in!");
-}
 
 module.exports = {
-  verifyToken,
-  sendMailToAdmin,
-  checkAuthenticated
+  sendMailToAdmin
 };

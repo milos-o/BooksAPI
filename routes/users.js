@@ -7,27 +7,23 @@ const bcrypt = require("bcrypt");
 const { isAdmin, isAuth } = require("../config/auth");
 const router = express.Router();
 
-router.get("/user/:username", UserController.findByUsername);
+router.get("/user/:username",isAuth, UserController.findByUsername);
 
 router.get("/users", isAuth, isAdmin, UserController.findAll);
 
-router.post("/user/", UserController.create);
+router.post("/user/", isAuth, UserController.create);
 
-router.put("/user/:username", UserController.update);
+router.put("/user/:username",isAuth, UserController.update);
 
-router.delete("/user/:username", UserController.deleteUser);
-
-//router.get("/login", UserController.login);
+router.delete("/user/:username", isAuth, UserController.deleteUser);
 
 router.get("/admins", isAuth, isAdmin,  UserController.getAllAdmins);
 
-router.get("/user", UserController.getBook);
+router.get("/user", isAuth, UserController.getBook);
 
-router.delete("/user", UserController.removeBook);
+router.delete("/user", isAuth, UserController.removeBook);
 
-router.post("/user", UserController.addBook);
-
-//router.post('/register', UserController.registerUser);
+router.post("/user", isAuth, UserController.addBook);
 
 
 router.post("/login", (req, res, next) => {
@@ -41,7 +37,7 @@ router.post("/login", (req, res, next) => {
 router.post("/register", (req, res) => {
   const { username, email, password, role } = req.body;
 
-  //validation passed
+ 
   User.findOne({ email: email }).exec((err, user) => {
     console.log(user);
     if (user) {
@@ -65,9 +61,7 @@ router.post("/register", (req, res) => {
           newUser
             .save()
             .then((value) => {
-              console.log(value);
-              //req.flash('success_msg','You have now registered!');
-              res.send("/users/login");
+              res.redirect("/login");
             })
             .catch((value) => console.log(value));
         })
