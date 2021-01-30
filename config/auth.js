@@ -24,7 +24,7 @@ const isAdmin = (req, res, next) => {
     if(req.user.role === true){
         return next();
     }
-    return res.status(401).send("You don't have permission for this access.");
+    return res.status(403).send("You don't have permission for this access.");
 }
 
 module.exports = {
