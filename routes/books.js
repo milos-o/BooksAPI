@@ -17,7 +17,6 @@ router.get('/book_num/:id',  isAuth,  BookController.numberOfBooks);
 router.post('/add-new', [
     body('price')
       .isNumeric()
-      .withMessage('Price has to be a number.')
       ,
     body('name')
       .isLength({ min: 3, max: 15 })

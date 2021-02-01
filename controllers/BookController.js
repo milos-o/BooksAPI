@@ -87,9 +87,6 @@ const postEditProduct = (req, res, next) => {
 
   Book.findById(bookId)
     .then((book) => {
-      //  if (book.userId.toString() !== req.user._id.toString()) {
-      //    return res.redirect('/');
-      //  }
       book.name = updatedName;
       book.price = updatedPrice;
       book.description = updatedDesc;
@@ -146,6 +143,9 @@ const AddOneBook = (req, res, next) => {
 
   Book.findById(bookId)
     .then((book) => {
+      if(book.quantity === 10){
+        return res.status(200).send("The quantity of books is at it's maximum.");
+      }
       book.quantity += 1;
       return book.save().then((result) => {
         console.log("Book quantity updated!");
@@ -163,6 +163,10 @@ const RemoveOneBook = (req, res, next) => {
 
   Book.findById(bookId)
     .then((book) => {
+      if(book.quantity === 1){
+        return res.status(200).send("The amount is at it's minimum.");
+      }
+
       book.quantity -= 1;
       return book.save().then((result) => {
         console.log("Book quantity updated!");
