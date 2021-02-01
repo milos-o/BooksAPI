@@ -59,14 +59,10 @@ const bookRoutes = require("./routes/books");
 
 app.use(userRoutes);
 app.use(bookRoutes);
-// mongodb+srv://Milos:<password>@cluster0.itwut.mongodb.net/<dbname>?retryWrites=true&w=majority || 'mongodb://localhost:27017/booksapi'
-
-const url =
-  'mongodb+srv://Rakic:jakasifra123@cluster0.itwut.mongodb.net/test?retryWrites=true&w=majority';
-
 
 mongoose
-  .connect(process.env.MONGODB_URI || url, {
+  .connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/booksapi'
+  , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
