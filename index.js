@@ -60,7 +60,7 @@ const bookRoutes = require("./routes/books");
 app.use(userRoutes);
 app.use(bookRoutes);
 
-let port = process.env.PORT || 5000;
+let appPort = process.env.PORT || 5000;
 
 
 mongoose
@@ -72,7 +72,7 @@ mongoose
     useCreateIndex: true
   })
   .then(result => {
-    app.listen(port);
+    app.listen(appPort);
   })
   .catch(err => {
     console.log(err);
