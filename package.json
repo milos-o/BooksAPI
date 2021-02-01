@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "webpack"
 },
+"heroku-run-build-script": true,
   "keywords": [],
   "author": "",
   "license": "ISC",

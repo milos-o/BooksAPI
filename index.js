@@ -62,7 +62,7 @@ app.use(bookRoutes);
 // mongodb+srv://Milos:<password>@cluster0.itwut.mongodb.net/<dbname>?retryWrites=true&w=majority || 'mongodb://localhost:27017/booksapi'
 
 const url =
-  'mongodb+srv://Milos:Milos@cluster0.itwut.mongodb.net/booksapi?retryWrites=true&w=majority';
+  'mongodb+srv://Rakic:jakasifra123@cluster0.itwut.mongodb.net/test?retryWrites=true&w=majority';
 
 
 mongoose
