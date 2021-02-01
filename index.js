@@ -59,6 +59,9 @@ const bookRoutes = require("./routes/books");
 
 app.use(userRoutes);
 app.use(bookRoutes);
+app.get("/",(req,res)=>{
+  res.send("heroku running")
+})
 
 let appPort = process.env.PORT || 5000;
 
