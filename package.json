@@ -1,11 +1,11 @@
 {
-  "name": "DrugiDomaci",
+  "name": "drugidomaci",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "build": "webpack"
+    "start": "node index.js"
+   // "build": "webpack"
 },
 "heroku-run-build-script": true,
   "keywords": [],
