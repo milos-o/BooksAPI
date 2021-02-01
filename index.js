@@ -60,6 +60,9 @@ const bookRoutes = require("./routes/books");
 app.use(userRoutes);
 app.use(bookRoutes);
 
+let PORT = process.env.PORT || 5000;
+
+
 mongoose
   .connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/booksapi'
   , {
@@ -69,7 +72,7 @@ mongoose
     useCreateIndex: true
   })
   .then(result => {
-    app.listen(5000);
+    app.listen(PORT);
   })
   .catch(err => {
     console.log(err);
