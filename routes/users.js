@@ -11,7 +11,7 @@ router.get("/user/:username",isAuth, UserController.findByUsername);
 
 router.get("/users", isAuth,  UserController.findAll);
 
-router.post("/user/",  UserController.create);
+router.post("/user/", UserController.create);
 
 router.put("/user/:username",isAuth, UserController.update);
 
