@@ -44,7 +44,12 @@ const addNew = (req, res, next) => {
   const quantity = req.body.quantity;
   const pages = req.body.pages;
   const userId = req.user._id;
-  const imageUrl = req.file.path;
+  let imageUrl;
+  if(req.file){
+    imageUrl = req.file.path;
+  }else{
+    imageUrl = null;
+  }
   
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -87,10 +92,18 @@ const postEditProduct = (req, res, next) => {
 
   Book.findById(bookId)
     .then((book) => {
-      book.name = updatedName;
-      book.price = updatedPrice;
-      book.description = updatedDesc;
-      book.pages = updatedPages;
+      if(!(req.user.username===book.userId) && !(req.user.role)){
+        return res.status(403).send("You don't have permissions.")
+      } 
+      if(updatedName){
+        book.name = updatedName;
+      }
+      if(updatedPrice){
+
+        book.price = updatedPrice;
+      }
+      if(updatedDesc) book.description = updatedDesc;
+      if(updatedPages) book.pages = updatedPages;
       if (image) {
         deleteFile(book.image);
         book.image = image.path;
@@ -108,13 +121,19 @@ const postEditProduct = (req, res, next) => {
 const postDeleteProduct = (req, res, next) => {
   const bookId = req.body.bookId;
 
+
   Book.findById(bookId)
     .then((book) => {
       if (!book) {
         return next(new Error("Book not found."));
       }
+
+
+      if(!(req.user.username===book.userId) && !(req.user.role)){
+        return res.status(403).send("You don't have permissions.")
+      } 
       
-      deleteFile(book.image);
+     // deleteFile(book.image);
       return Book.deleteOne({ _id: bookId });
     })
     .then(() => {

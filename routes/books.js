@@ -31,15 +31,15 @@ router.post('/add-new', [
       body('pages')
       .isNumeric({ min: 10, max: 50000 })
       
-  ],  isAuth, isAdmin, BookController.addNew);
+  ],  isAuth, BookController.addNew);
 
-router.post('/edit-book',  isAuth, isAdmin,  BookController.postEditProduct);
+router.post('/edit-book',  isAuth,  BookController.postEditProduct);
 
 router.post('/book_inc/:id', isAuth,  BookController.AddOneBook);
 
 router.post('/book_dec/:id', isAuth,  BookController.RemoveOneBook);
 
-router.delete('/delete-book', isAuth, isAdmin, BookController.postDeleteProduct);
+router.delete('/delete-book', isAuth, BookController.postDeleteProduct);
 
 router.get('/values',  isAuth, BookController.getMoney);
 
